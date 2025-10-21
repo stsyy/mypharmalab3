@@ -33,7 +33,16 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    // Добавьте это для тестов
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.jvmArgs("-noverify") // Разрешает Mockito мокировать final-классы
+        }
+    }
 }
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -41,9 +50,26 @@ dependencies {
 
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.1")
-    implementation(libs.androidx.work.runtime.ktx)
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("com.google.android.material:material:1.12.0")
+
+    // --- ЗАВИСИМОСТИ ДЛЯ ЮНИТ-ТЕСТОВ (testImplementation) ---
     testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.work:work-testing:2.9.0")
+
+    // Mockito для тестирования
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    // mockito-inline НУЖЕН для мокирования статики
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+
+    // --- ЗАВИСИМОСТИ ДЛЯ INSTRUMENTED ТЕСТОВ ---
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
