@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".View.AddMedicineFragment">
+
+    <EditText
+        android:id="@+id/medicineName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Название лекарства"
+        android:imeOptions="actionNext"
+        android:inputType="textCapSentences"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/expiryDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Срок годности (дд.мм.гггг)"
+        android:focusable="false"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/medicineName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <CheckBox
+        android:id="@+id/reminderCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Напомнить за 3 дня"
+        app:layout_constraintTop_toBottomOf="@id/expiryDate"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/seasonalCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сезонное лекарство"
+        app:layout_constraintTop_toBottomOf="@id/reminderCheckbox"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Добавить в аптечку"
+        app:layout_constraintTop_toBottomOf="@id/seasonalCheckbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/scanButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Сканировать штрихкод"
+        app:layout_constraintTop_toBottomOf="@id/addButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

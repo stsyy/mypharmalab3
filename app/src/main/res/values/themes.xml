@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Mypharmalab3" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -7,4 +6,9 @@
     </style>
 
     <style name="Theme.Mypharmalab3" parent="Base.Theme.Mypharmalab3" />
+
+    <style name="Theme.Mypharmalab3.NoActionBar" parent="Theme.Mypharmalab3">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">mypharmalab3</string>
+    <string name="nav_home">Главный экран</string>
+    <string name="nav_add_medicine">Добавить лекарство</string>
 </resources>

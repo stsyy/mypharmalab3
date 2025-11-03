@@ -1,113 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#F5F5F5">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <!-- Заголовок -->
-
-    <!-- Кнопка сканирования штрихкода -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="💊 Цифровая Аптечка"
-        android:textColor="#2E7D32"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent">
 
-    <!-- Ввод названия лекарства -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/scanButton"
-        android:layout_width="293dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#FF9800"
-        android:ellipsize="middle"
-        android:padding="15dp"
-        android:text="📷 Сканировать штрихкод"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:title="Моя Аптечка"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Название лекарства:"
-        android:textColor="#333333"
-        android:textSize="14sp" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:id="@+id/medicineName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/edittext_background"
-        android:hint="Например: Нурофен, Супрастин..."
-        android:imeOptions="actionNext"
-        android:inputType="textCapSentences"
-        android:padding="12dp"
-        android:textSize="14sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Ввод срока годности -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Срок годности:"
-        android:textColor="#333333"
-        android:textSize="14sp" />
-
-    <EditText
-        android:id="@+id/expiryDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/edittext_background"
-        android:hint="дд.мм.гггг"
-        android:imeOptions="actionDone"
-        android:inputType="date"
-        android:padding="12dp"
-        android:textSize="14sp" />
-
-    <!-- CheckBox для напоминания -->
-    <CheckBox
-        android:id="@+id/reminderCheckbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:padding="12dp"
-        android:text="Напоминать о сроке годности"
-        android:textColor="#333333"
-        android:textSize="14sp" />
-
-    <!-- CheckBox для сезонных рекомендаций -->
-
-    <!-- Кнопка добавления -->
-    <CheckBox
-        android:id="@+id/seasonalCheckbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:padding="12dp"
-        android:text="Показать сезонные рекомендации"
-        android:textColor="#333333"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="262dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#4CAF50"
-        android:padding="15dp"
-        android:text="Добавить в аптечку"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-</LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_menu"
+        app:headerLayout="@layout/nav_header_main" /> </androidx.drawerlayout.widget.DrawerLayout>

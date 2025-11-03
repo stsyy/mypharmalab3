@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.mypharmalab3.ui.HomeFragment"
-        android:label="Главная" />
+        android:label="@string/nav_home"
+        tools:layout="@layout/activity_main"> <action
+        android:id="@+id/action_homeFragment_to_addMedicineFragment"
+        app:destination="@id/addMedicineFragment" />
+
+        <argument
+            android:name="resultMessage"
+            app:argType="string"
+            android:defaultValue=" " />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addMedicineFragment"
+        android:name="com.example.mypharmalab3.View.AddMedicineFragment"
+        android:label="@string/nav_add_medicine"
+        tools:layout="@layout/fragment_add_medicine">
+
+        <action
+            android:id="@+id/action_addMedicineFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>
