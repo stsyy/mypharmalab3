@@ -49,6 +49,11 @@ class MedicineModel {
         return medicineList.map { it.name }.distinct().sorted()
     }
 
+    fun deleteMedicine(medicine: Medicine): Boolean {
+        // Удаляем объект из списка
+        return medicineList.remove(medicine)
+    }
+
     fun getSeasonalRecommendations(): List<String> {
         val month = Calendar.getInstance().get(Calendar.MONTH) + 1
         return when (month) {

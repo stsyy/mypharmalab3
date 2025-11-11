@@ -100,6 +100,10 @@ class MedicineController(private val model: MedicineModel) {
         return model.getAllMedicines()
     }
 
+    fun deleteMedicine(medicine: Medicine): Boolean {
+        return model.deleteMedicine(medicine)
+    }
+
     fun handleBarcodeScan(barcode: String): String {
         val info = model.getMedicineByBarcode(barcode)
         return if (info != null) {

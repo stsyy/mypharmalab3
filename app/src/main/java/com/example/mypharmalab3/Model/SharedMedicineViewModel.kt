@@ -51,6 +51,15 @@ class SharedMedicineViewModel : ViewModel() {
         return message
     }
 
+    fun deleteMedicine(medicine: Medicine) {
+        // 1. Вызываем Controller для удаления из Model
+        // ПРИМЕЧАНИЕ: Тебе нужно добавить метод deleteMedicine(medicine: Medicine) в MedicineController.kt
+        controller.deleteMedicine(medicine)
+
+        // 2. Обновляем LiveData, чтобы HomeFragment сразу увидел изменение
+        loadMedicines()
+    }
+
     // ⭐️ МЕТОД 2: Обработка сканирования штрихкода (добавлен для полноты)
     fun handleBarcodeScan(barcode: String): String {
         // Делегируем работу Controller, который знает о Model
