@@ -18,9 +18,6 @@ class MedicineController(private val model: MedicineModel) {
         if (name.isBlank() || expiryInput.isBlank()) {
             return "Введите все данные"
         }
-
-        // Мы полагаемся на то, что дата из календаря уже будет отформатирована,
-        // но оставляем валидацию на случай, если кто-то попытается обойти UI.
         val formattedDate = formatAndValidateDate(expiryInput) ?: return "Неверный формат даты (дд.мм.гггг)"
         val expiryDate = parseDate(formattedDate) ?: return "Некорректная дата"
 
@@ -38,10 +35,12 @@ class MedicineController(private val model: MedicineModel) {
         return model.saveMedicine(medicine)
     }
 
-    // *** ФУНКЦИЯ formatExpiryInputForDisplay УДАЛЕНА ***
+    fun getUniqueMedicineNames(): List<String> {
+        return model.getUniqueMedicineNames()
+    }
 
     private fun formatAndValidateDate(input: String): String? {
-        // ... (Ваша логика валидации даты остается)
+
         val digits = input.filter { it.isDigit() }
         if (digits.length < 8) return null
 
@@ -94,6 +93,11 @@ class MedicineController(private val model: MedicineModel) {
 
     private fun isLeapYear(year: Int): Boolean {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
+
+    fun getMedicineList(): List<Medicine> {
+
+        return model.getAllMedicines()
     }
 
     fun handleBarcodeScan(barcode: String): String {

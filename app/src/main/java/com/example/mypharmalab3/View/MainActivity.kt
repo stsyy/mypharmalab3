@@ -8,6 +8,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mypharmalab3.Controller.MedicineController
 import com.example.mypharmalab3.R
 import com.google.android.material.navigation.NavigationView
 
