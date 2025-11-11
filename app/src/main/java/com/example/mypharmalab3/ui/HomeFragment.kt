@@ -17,6 +17,7 @@ import com.example.mypharmalab3.View.MedicineAdapter
 import com.example.mypharmalab3.View.OnMedicineItemClickListener // ⭐️ Обновленный импорт интерфейса
 import com.example.mypharmalab3.Model.SharedMedicineViewModel
 import com.example.mypharmalab3.Model.Medicine
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // ⭐️ РЕАЛИЗУЕМ НОВЫЙ ИНТЕРФЕЙС OnMedicineItemClickListener
 class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListener {
@@ -26,6 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
     private lateinit var adapter: MedicineAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var resultTextView: TextView
+    private lateinit var fabAdd: FloatingActionButton
 
     // ⭐️ НОВОЕ: Временное хранение medicine для контекстного меню
     private var contextMenuMedicine: Medicine? = null
@@ -35,6 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
 
         recyclerView = view.findViewById(R.id.medicineRecyclerView)
         resultTextView = view.findViewById(R.id.tv_result_message)
+        fabAdd = view.findViewById(R.id.fabAdd)
 
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -47,6 +50,15 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
 
         // Регистрируем RecyclerView для получения контекстного меню
         registerForContextMenu(recyclerView)
+
+        fabAdd.setOnClickListener {
+            // 1. Обязательно очищаем selectedMedicine, чтобы AddFragment открылся
+            //    в режиме "Добавить", а не в режиме "Редактировать"
+            sharedViewModel.clearSelectedMedicine()
+
+            // 2. Выполняем навигацию на фрагмент добавления
+            findNavController().navigate(R.id.action_homeFragment_to_addMedicineFragment)
+        }
 
         sharedViewModel.medicines.observe(viewLifecycleOwner) { newMedicineList ->
             adapter.updateData(newMedicineList)
