@@ -17,6 +17,9 @@ class SharedMedicineViewModel : ViewModel() {
     private val _uniqueNames = MutableLiveData<List<String>>()
     val uniqueNames: LiveData<List<String>> = _uniqueNames
 
+    private val _selectedMedicine = MutableLiveData<Medicine?>()
+    val selectedMedicine: LiveData<Medicine?> = _selectedMedicine
+
     init {
         loadMedicines()
     }
@@ -58,6 +61,15 @@ class SharedMedicineViewModel : ViewModel() {
 
         // 2. Обновляем LiveData, чтобы HomeFragment сразу увидел изменение
         loadMedicines()
+    }
+
+    fun setMedicineToEdit(medicine: Medicine) {
+        _selectedMedicine.value = medicine
+    }
+
+    // ⭐️ НОВОЕ: Очистка выбранного объекта после редактирования
+    fun clearSelectedMedicine() {
+        _selectedMedicine.value = null
     }
 
     // ⭐️ МЕТОД 2: Обработка сканирования штрихкода (добавлен для полноты)

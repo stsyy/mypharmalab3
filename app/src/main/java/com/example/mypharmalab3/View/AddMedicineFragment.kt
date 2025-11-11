@@ -39,6 +39,7 @@ class AddMedicineFragment : Fragment() {
     private lateinit var seasonalCheckbox: CheckBox
     private lateinit var addButton: Button
     private lateinit var scanButton: Button
+    private var medicineToEdit: Medicine? = null
 
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
         if (result.contents == null) {
@@ -103,6 +104,23 @@ class AddMedicineFragment : Fragment() {
 
         addButton.setOnClickListener { onAddMedicineClicked() }
         scanButton.setOnClickListener { startBarcodeScanner() }
+
+        sharedViewModel.selectedMedicine.value?.let { medicine ->
+            // Мы в режиме редактирования, если selectedMedicine не null!
+            medicineToEdit = medicine
+
+            // 1. Заполняем поля данными
+            medicineName.setText(medicine.name)
+            expiryDate.setText(medicine.expiryDate)
+            reminderCheckbox.isChecked = medicine.reminder
+            seasonalCheckbox.isChecked = medicine.seasonal
+
+            // 2. Меняем текст кнопки
+            addButton.text = "Сохранить изменения"
+
+            // 3. Отключаем сканер (сканировать при редактировании не нужно)
+            scanButton.visibility = View.GONE
+        }
     }
 
     private fun showDatePickerDialog() {
@@ -145,17 +163,27 @@ class AddMedicineFragment : Fragment() {
     }
 
     private fun onAddMedicineClicked() {
-        // ⭐️ ИСПРАВЛЕНО: Все операции по сохранению идут через ViewModel
+
+        // ⭐️ НОВАЯ ЛОГИКА: "Удалить старое" перед сохранением (если мы редактируем)
+        medicineToEdit?.let { oldMedicine ->
+            // Сначала удаляем старую версию объекта
+            sharedViewModel.deleteMedicine(oldMedicine)
+        }
+
         val message = sharedViewModel.handleAddMedicine(
             name = medicineName.text.toString(),
             expiryInput = expiryDate.text.toString(),
             reminder = reminderCheckbox.isChecked,
             seasonal = seasonalCheckbox.isChecked
         )
+
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-        // ВАЖНО: Временное создание объекта Medicine для Worker, т.к. Worker не знает о ViewModel
 
         if (message.startsWith("✅")) {
+            // ⭐️ ОЧИСТКА ВЫБРАННОГО ОБЪЕКТА (После успешного сохранения/редактирования)
+            // Это гарантирует, что фрагмент при следующем открытии будет в режиме "Добавить"
+            sharedViewModel.clearSelectedMedicine()
+
             val medicine = Medicine(
                 name = medicineName.text.toString(),
                 expiryDate = expiryDate.text.toString(),
@@ -169,8 +197,6 @@ class AddMedicineFragment : Fragment() {
             clearFields()
         }
         else {
-            // Логика ошибки: если валидация не прошла, стираем только поле даты,
-            // чтобы пользователь не перепечатывал название лекарства.
             expiryDate.text.clear()
         }
     }

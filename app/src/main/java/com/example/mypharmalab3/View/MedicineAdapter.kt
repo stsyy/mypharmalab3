@@ -1,21 +1,24 @@
-// Файл MedicineAdapter.kt
 package com.example.mypharmalab3.View
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mypharmalab3.Model.Medicine // Убедитесь, что путь верный
+import com.example.mypharmalab3.Model.Medicine
 import com.example.mypharmalab3.R
-import android.widget.ImageButton
 
-interface OnDeleteClickListener {
+// ⭐️ ОБНОВЛЕННЫЙ ИНТЕРФЕЙС: Добавляем метод для долгого нажатия
+interface OnMedicineItemClickListener {
     fun onDeleteClick(medicine: Medicine)
+    fun onLongClick(medicine: Medicine): Boolean // Добавляем обработчик для контекстного меню
 }
 
-class MedicineAdapter(private var medicineList: List<Medicine>,
-                      private val deleteClickListener: OnDeleteClickListener
+class MedicineAdapter(
+    private var medicineList: List<Medicine>,
+    // ⭐️ ИСПОЛЬЗУЕМ ОБЩИЙ ИНТЕРФЕЙС
+    private val itemClickListener: OnMedicineItemClickListener
 ) :
     RecyclerView.Adapter<MedicineAdapter.MedicineViewHolder>() {
 
@@ -35,15 +38,21 @@ class MedicineAdapter(private var medicineList: List<Medicine>,
         val medicine = medicineList[position]
         holder.nameTextView.text = medicine.name
         holder.expiryTextView.text = "Срок годности: ${medicine.expiryDate}"
+
+        // Обработка удаления (D1)
         holder.deleteButton.setOnClickListener {
-            // Вызываем метод интерфейса, который передаст событие во HomeFragment
-            deleteClickListener.onDeleteClick(medicine)
+            itemClickListener.onDeleteClick(medicine)
+        }
+
+        // ⭐️ ОБРАБОТКА ДОЛГОГО НАЖАТИЯ (U1)
+        holder.itemView.setOnLongClickListener {
+            // Возвращаем результат из обработчика (true, если событие обработано)
+            itemClickListener.onLongClick(medicine)
         }
     }
 
     override fun getItemCount(): Int = medicineList.size
 
-    // Функция для обновления данных (нужна, когда вы добавляете новое лекарство)
     fun updateData(newMedicineList: List<Medicine>) {
         medicineList = newMedicineList
         notifyDataSetChanged()
