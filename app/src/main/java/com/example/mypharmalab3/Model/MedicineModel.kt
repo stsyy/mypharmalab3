@@ -7,13 +7,11 @@ import java.time.LocalDate
 
 class MedicineModel {
 
-    // ⭐️ ШАГ 2: Добавление внутреннего хранилища для лекарств
     private val medicineList = mutableListOf<Medicine>()
 
     private val medicineDatabase = mapOf(
         "4601234567890" to "Нурофен таблетки 200мг",
         "4602345678901" to "Супрастин 25мг",
-        // ... (остальные штрихкоды) ...
         "4610123456789" to "Йод 5% раствор",
         "4602193012837" to "Ингавирин 90мгыЫ"
 
@@ -23,9 +21,8 @@ class MedicineModel {
         return medicineDatabase[barcode]
     }
 
-    // ⭐️ ШАГ 3: Исправленная функция saveMedicine
     fun saveMedicine(medicine: Medicine): String {
-        // Самое главное: добавляем лекарство в список!
+
         medicineList.add(medicine)
 
         val sb = StringBuilder().apply {
@@ -38,19 +35,18 @@ class MedicineModel {
         return sb.toString()
     }
 
-    // ⭐️ ШАГ 4: Функция, которую вызывает Controller (теперь рабочая)
     fun getAllMedicines(): List<Medicine> {
-        // Возвращаем копию списка, чтобы внешний код не мог его случайно изменить
+
         return medicineList.toList()
     }
 
     fun getUniqueMedicineNames(): List<String> {
-        // Извлекаем все имена, оставляем только уникальные и сортируем
+
         return medicineList.map { it.name }.distinct().sorted()
     }
 
     fun deleteMedicine(medicine: Medicine): Boolean {
-        // Удаляем объект из списка
+
         return medicineList.remove(medicine)
     }
 

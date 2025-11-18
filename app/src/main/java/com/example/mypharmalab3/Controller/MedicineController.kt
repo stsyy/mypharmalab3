@@ -32,7 +32,21 @@ class MedicineController(private val model: MedicineModel) {
             seasonal = seasonal
         )
 
-        return model.saveMedicine(medicine)
+        // ⭐️⭐️⭐️ ИЗМЕНЕНИЯ ЗДЕСЬ ⭐️⭐️⭐️
+        val saveResult = model.saveMedicine(medicine)
+
+        // Если сохранение успешно, возвращаем подробное сообщение
+        if (saveResult.startsWith("✅")) {
+            return "✅ Лекарство добавлено:\n" +
+                    "Название: $name\n" +
+                    "Срок годности: $formattedDate\n" +
+                    "Напоминание: ${if (reminder) "Включено" else "Нет"}\n" +
+                    "Сезонные рекомендации: ${if (seasonal) "Да" else "Нет"}"
+        }
+
+        // Если сохранение не удалось (например, MedicineModel вернул ошибку), возвращаем ее
+        return saveResult
+        // ⭐️⭐️⭐️ КОНЕЦ ИЗМЕНЕНИЙ ⭐️⭐️⭐️
     }
 
     fun getUniqueMedicineNames(): List<String> {

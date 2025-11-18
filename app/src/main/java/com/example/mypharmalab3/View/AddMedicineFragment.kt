@@ -28,10 +28,7 @@ import java.util.Locale
 
 class AddMedicineFragment : Fragment() {
 
-    // ⭐️ 1. ДВУНАПРАВЛЕННАЯ СВЯЗЬ: Объявление Shared ViewModel (Единственный источник истины)
     private val sharedViewModel: SharedMedicineViewModel by activityViewModels()
-
-    // 🛑 УДАЛЕНО: private lateinit var controller: MedicineController (больше не нужен)
 
     private lateinit var medicineName: AutoCompleteTextView
     private lateinit var expiryDate: EditText
@@ -45,7 +42,6 @@ class AddMedicineFragment : Fragment() {
         if (result.contents == null) {
             Toast.makeText(requireContext(), "Сканирование отменено", Toast.LENGTH_SHORT).show()
         } else {
-            // ⭐️ ИСПРАВЛЕНО: Вызываем через ViewModel
             val message = sharedViewModel.handleBarcodeScan(result.contents)
 
             val foundName = message
@@ -58,8 +54,6 @@ class AddMedicineFragment : Fragment() {
             expiryDate.requestFocus()
         }
     }
-
-    // 🛑 УДАЛЕНО: override fun onCreate(...) {...} (инициализация контроллера теперь в ViewModel)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,11 +75,11 @@ class AddMedicineFragment : Fragment() {
         sharedViewModel.uniqueNames.observe(viewLifecycleOwner) { namesList ->
             val adapter = ArrayAdapter(
                 requireContext(),
-                android.R.layout.simple_dropdown_item_1line, // Стандартный Android-макет
+                android.R.layout.simple_dropdown_item_1line,
                 namesList
             )
             medicineName.setAdapter(adapter)
-            // Подсказка появляется после ввода первого символа
+
             medicineName.threshold = 1
         }
 
@@ -106,7 +100,6 @@ class AddMedicineFragment : Fragment() {
         scanButton.setOnClickListener { startBarcodeScanner() }
 
         sharedViewModel.selectedMedicine.value?.let { medicine ->
-            // Мы в режиме редактирования, если selectedMedicine не null!
             medicineToEdit = medicine
 
             // 1. Заполняем поля данными
@@ -163,8 +156,10 @@ class AddMedicineFragment : Fragment() {
     }
 
     private fun onAddMedicineClicked() {
+        // Определяем тип операции для сообщения
+        val isEditing = medicineToEdit != null
 
-        // ⭐️ НОВАЯ ЛОГИКА: "Удалить старое" перед сохранением (если мы редактируем)
+        // Удалить старое" перед сохранением (если мы редактируем)
         medicineToEdit?.let { oldMedicine ->
             // Сначала удаляем старую версию объекта
             sharedViewModel.deleteMedicine(oldMedicine)
@@ -177,11 +172,14 @@ class AddMedicineFragment : Fragment() {
             seasonal = seasonalCheckbox.isChecked
         )
 
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 
         if (message.startsWith("✅")) {
-            // ⭐️ ОЧИСТКА ВЫБРАННОГО ОБЪЕКТА (После успешного сохранения/редактирования)
-            // Это гарантирует, что фрагмент при следующем открытии будет в режиме "Добавить"
+            // ОЧИСТКА ВЫБРАННОГО ОБЪЕКТА (После успешного сохранения/редактирования)
+            if (reminderCheckbox.isChecked && seasonalCheckbox.isChecked) {
+                // Если да, показываем ПОЛНОЕ сообщение с деталями!
+                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+            }
             sharedViewModel.clearSelectedMedicine()
 
             val medicine = Medicine(
@@ -192,7 +190,23 @@ class AddMedicineFragment : Fragment() {
             )
             MedicineReminderWorker.scheduleReminder(requireContext(), medicine)
 
-            findNavController().popBackStack()
+            // ⭐️⭐️⭐️ ИЗМЕНЕНИЯ ЗДЕСЬ ⭐️⭐️⭐️
+
+            // 1. Формируем сообщение об успешной операции
+            val successMessage = if (isEditing) {
+                "✅ Лекарство успешно обновлено!"
+            } else {
+                "✅ Лекарство успешно добавлено!"
+            }
+
+            // 2. Используем сгенерированный класс NavDirections для передачи аргумента
+            val action = AddMedicineFragmentDirections.actionAddMedicineFragmentToHomeFragment(
+                resultMessage = successMessage
+            )
+
+            // 3. Выполняем навигацию с аргументом
+            findNavController().navigate(action)
+            // ⭐️⭐️⭐️ КОНЕЦ ИЗМЕНЕНИЙ ⭐️⭐️⭐️
 
             clearFields()
         }

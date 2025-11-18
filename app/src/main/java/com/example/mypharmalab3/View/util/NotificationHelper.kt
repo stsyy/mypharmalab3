@@ -36,7 +36,7 @@ object NotificationHelper {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_medicine) // убедись, что ic_medicine добавлен в res/drawable
+            .setSmallIcon(R.drawable.ic_medicine)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

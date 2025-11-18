@@ -17,6 +17,11 @@
             android:name="resultMessage"
             app:argType="string"
             android:defaultValue=" " />
+
+        <action
+            android:id="@+id/action_homeFragment_self"
+            app:destination="@id/homeFragment" />
+
     </fragment>
 
     <fragment
