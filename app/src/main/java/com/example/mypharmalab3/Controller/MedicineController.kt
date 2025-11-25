@@ -32,10 +32,8 @@ class MedicineController(private val model: MedicineModel) {
             seasonal = seasonal
         )
 
-        // ⭐️⭐️⭐️ ИЗМЕНЕНИЯ ЗДЕСЬ ⭐️⭐️⭐️
         val saveResult = model.saveMedicine(medicine)
 
-        // Если сохранение успешно, возвращаем подробное сообщение
         if (saveResult.startsWith("✅")) {
             return "✅ Лекарство добавлено:\n" +
                     "Название: $name\n" +
@@ -44,9 +42,21 @@ class MedicineController(private val model: MedicineModel) {
                     "Сезонные рекомендации: ${if (seasonal) "Да" else "Нет"}"
         }
 
-        // Если сохранение не удалось (например, MedicineModel вернул ошибку), возвращаем ее
         return saveResult
-        // ⭐️⭐️⭐️ КОНЕЦ ИЗМЕНЕНИЙ ⭐️⭐️⭐️
+
+    }
+
+    /**
+     * Обрабатывает список импортированных лекарств, добавляя их в MedicineModel.
+     * @param importedList Список лекарств, прочитанных из CSV.
+     */
+    fun handleImportMedicines(importedList: List<Medicine>) {
+
+        importedList.forEach { medicine ->
+            // 🚨 ВАЖНО: Используем твою модель для сохранения каждого элемента.
+            // Убедись, что в MedicineModel есть метод addMedicine.
+            model.saveMedicine(medicine)
+        }
     }
 
     fun getUniqueMedicineNames(): List<String> {

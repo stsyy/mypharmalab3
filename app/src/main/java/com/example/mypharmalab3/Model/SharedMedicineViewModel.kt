@@ -49,6 +49,15 @@ class SharedMedicineViewModel : ViewModel() {
         return message
     }
 
+    fun importMedicines(importedList: List<Medicine>) {
+
+        // 1. Передаем список в Controller для сохранения (этот метод мы добавим ниже)
+        controller.handleImportMedicines(importedList)
+
+        // 2. Обновляем LiveData, чтобы UI сразу обновился
+        loadMedicines()
+    }
+
     fun deleteMedicine(medicine: Medicine) {
         controller.deleteMedicine(medicine)
 

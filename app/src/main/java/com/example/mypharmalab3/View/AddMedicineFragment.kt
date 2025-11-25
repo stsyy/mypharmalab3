@@ -190,23 +190,17 @@ class AddMedicineFragment : Fragment() {
             )
             MedicineReminderWorker.scheduleReminder(requireContext(), medicine)
 
-            // ⭐️⭐️⭐️ ИЗМЕНЕНИЯ ЗДЕСЬ ⭐️⭐️⭐️
-
-            // 1. Формируем сообщение об успешной операции
             val successMessage = if (isEditing) {
                 "✅ Лекарство успешно обновлено!"
             } else {
                 "✅ Лекарство успешно добавлено!"
             }
 
-            // 2. Используем сгенерированный класс NavDirections для передачи аргумента
             val action = AddMedicineFragmentDirections.actionAddMedicineFragmentToHomeFragment(
                 resultMessage = successMessage
             )
 
-            // 3. Выполняем навигацию с аргументом
             findNavController().navigate(action)
-            // ⭐️⭐️⭐️ КОНЕЦ ИЗМЕНЕНИЙ ⭐️⭐️⭐️
 
             clearFields()
         }

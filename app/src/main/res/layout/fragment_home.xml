@@ -22,6 +22,42 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"/>
 
+        <!-- ⭐️⭐️⭐️ 1. ИСПРАВЛЕННЫЙ БЛОК КНОПОК: 3 кнопки в одном контейнере без weightSum ⭐️⭐️⭐️ -->
+        <LinearLayout
+            android:id="@+id/storage_buttons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/exportButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Экспорт CSV"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/importButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Импорт CSV"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"/>
+
+            <Button
+                android:id="@+id/exportPdfButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Экспорт PDF"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+        <!-- ⭐️⭐️⭐️ КОНЕЦ БЛОКА КНОПОК ⭐️⭐️⭐️ -->
+
+        <!-- ⭐️⭐️⭐️ 2. ДОБАВЛЕННЫЙ ТЕКСТ (tv_result_message) ⭐️⭐️⭐️ -->
         <TextView
             android:id="@+id/tv_result_message"
             android:layout_width="wrap_content"
@@ -30,6 +66,7 @@
             android:textSize="16sp"
             android:layout_gravity="center_horizontal"
             android:textColor="?attr/colorPrimary"/>
+        <!-- ⭐️⭐️⭐️ КОНЕЦ ДОБАВЛЕННОГО ТЕКСТА ⭐️⭐️⭐️ -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/medicineRecyclerView"
@@ -39,7 +76,8 @@
             android:clipToPadding="false"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:contentDescription="Список добавленных лекарств в аптечке"/>
 
     </LinearLayout>
 
@@ -47,6 +85,8 @@
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"  android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
         android:contentDescription="Добавить лекарство"
-        app:srcCompat="@android:drawable/ic_input_add" /> </FrameLayout>
+        app:srcCompat="@android:drawable/ic_input_add" />
+</FrameLayout>
