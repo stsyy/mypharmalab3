@@ -106,7 +106,7 @@ class PdfGenerator(private val context: Context) {
         for (medicine in medicineList) {
             if (currentY > PAGE_HEIGHT - MARGIN_Y) {
                 // Если место закончилось, прекращаем рисование.
-                break // ⭐️ Теперь 'break' находится внутри цикла и работает корректно!
+                break
             }
 
             val reminderText = if (medicine.reminder) "Да" else "Нет"

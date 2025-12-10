@@ -25,7 +25,7 @@ import com.example.mypharmalab3.Model.SharedMedicineViewModel
 import com.example.mypharmalab3.Model.Medicine
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Date
-import android.content.Intent // ⭐️ Импортируем Intent
+
 import androidx.activity.result.contract.ActivityResultContracts
 
 class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListener {
@@ -50,12 +50,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
 
 
     private val createCsvFile = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+
         if (uri != null) {
             val medicines = sharedViewModel.medicines.value ?: emptyList()
-            if (medicines.isEmpty()) {
-                Toast.makeText(requireContext(), "Нечего экспортировать: список пуст.", Toast.LENGTH_SHORT).show()
-                return@registerForActivityResult
-            }
 
             val csvData = csvHandler.listToCsv(medicines)
             val success = csvHandler.writeCsvFile(uri, csvData)
@@ -84,12 +81,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
     }
 
     private val createPdfFile = registerForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+
         if (uri != null) {
             val medicines = sharedViewModel.medicines.value ?: emptyList()
-            if (medicines.isEmpty()) {
-                Toast.makeText(requireContext(), "Нечего генерировать: список пуст.", Toast.LENGTH_SHORT).show()
-                return@registerForActivityResult
-            }
 
             val success = pdfGenerator.generateAndWritePdf(uri, medicines)
 
@@ -101,7 +95,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Инициализируем manager, как только Context станет доступен (в onViewCreated)
+
         settingsManager = BinarySettingsManager(requireContext())
         csvHandler = CsvFileHandler(requireContext())
         pdfGenerator = PdfGenerator(requireContext())
@@ -123,7 +117,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
         // 4. Обновление
         settingsManager.updateDefaultReminderDays(7)
 
-        // 5. Удаление (закомментировано, чтобы не удалять сразу)
+        // 5. Удаление
         // settingsManager.deletePreferences()
 
         recyclerView = view.findViewById(R.id.medicineRecyclerView)
@@ -160,7 +154,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
         }
 
         exportButton.setOnClickListener {
-            // Запускаем системный диалог для создания нового файла
+            val medicines = sharedViewModel.medicines.value ?: emptyList()
+            if (medicines.isEmpty()) {
+                Toast.makeText(requireContext(), "Нечего экспортировать: список пуст.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Выход, если список пуст
+            }
             val defaultFileName = "med_catalog_${Date().time}.csv"
             createCsvFile.launch(defaultFileName)
         }
@@ -172,6 +170,11 @@ class HomeFragment : Fragment(R.layout.fragment_home), OnMedicineItemClickListen
         }
 
         exportPdfButton.setOnClickListener {
+            val medicines = sharedViewModel.medicines.value ?: emptyList()
+            if (medicines.isEmpty()) {
+                Toast.makeText(requireContext(), "Нечего экспортировать: список пуст.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Выход, если список пуст
+            }
             val defaultFileName = "pharmacy_report_${Date().time}.pdf"
             createPdfFile.launch(defaultFileName)
         }

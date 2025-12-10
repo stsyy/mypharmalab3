@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
-
+    id("org.greenrobot.greendao")
 }
 
 android {
@@ -43,6 +43,16 @@ android {
             it.jvmArgs("-noverify") // Разрешает Mockito мокировать final-классы
         }
     }
+    sourceSets {
+        // Manually add the generated source folder for Kotlin to find the files
+        getByName("main").java.srcDirs += "build/generated/source/greendao"
+    }
+}
+
+greendao {
+    schemaVersion = 1
+    daoPackage = "com.example.mypharmalab3.db_entities"
+    targetGenDir = "src/main/java"
 }
 
 dependencies {
@@ -60,6 +70,11 @@ dependencies {
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation("com.google.android.material:material:1.12.0")
 
+    implementation("org.greenrobot:greendao:3.3.0")
+    implementation("org.greenrobot:greendao-api:3.3.1")
+
+    implementation("org.greenrobot:greendao-kotlin:3.3.1")
+
     // --- ЗАВИСИМОСТИ ДЛЯ ЮНИТ-ТЕСТОВ (testImplementation) ---
     testImplementation("junit:junit:4.13.2")
     testImplementation("androidx.test:core:1.5.0")
@@ -67,7 +82,6 @@ dependencies {
 
     // Mockito для тестирования
     testImplementation("org.mockito:mockito-core:5.11.0")
-    // mockito-inline НУЖЕН для мокирования статики
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
 
@@ -77,4 +91,15 @@ dependencies {
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.cardview:cardview:1.0.0")
+
+    implementation ("org.greenrobot:greendao-kotlin:3.3.0")
+
+    implementation ("org.greenrobot:greendao-kotlin:3.3.1")
+
+    // Добавь Coroutines, так как работа с базой должна быть асинхронной
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2") // уже должна быть
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+
 }
